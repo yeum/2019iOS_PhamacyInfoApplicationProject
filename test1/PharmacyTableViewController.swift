@@ -29,6 +29,12 @@ class PharmacyTableViewController: UITableViewController, XMLParserDelegate {
     var wgs84Lat = NSMutableString()
     var wgs84Lon = NSMutableString()
     
+    // 약국 id
+    var hpid = NSMutableString()
+    
+    
+    var pharmacyid = ""
+    
     // parser오브젝트 초기화하고 NSXMLParserDelegate로 설정하고 XML 파싱 시작
     func beginParsing()
     {
@@ -56,6 +62,8 @@ class PharmacyTableViewController: UITableViewController, XMLParserDelegate {
             wgs84Lat = ""
             wgs84Lon = NSMutableString()
             wgs84Lon = ""
+            hpid = NSMutableString()
+            hpid = ""
         }
     }
     
@@ -75,6 +83,9 @@ class PharmacyTableViewController: UITableViewController, XMLParserDelegate {
             wgs84Lat.append(string)
         } else if element.isEqual(to: "wgs84Lon") {
             wgs84Lon.append(string)
+        }
+        else if element.isEqual(to: "hpid") {
+            hpid.append(string)
         }
     }
     
@@ -98,6 +109,9 @@ class PharmacyTableViewController: UITableViewController, XMLParserDelegate {
             if !wgs84Lon.isEqual(nil) {
                 elements.setObject(wgs84Lon, forKey: "wgs84Lon" as NSCopying)
             }
+            if !hpid.isEqual(nil) {
+                elements.setObject(hpid, forKey: "hpid" as NSCopying)
+            }
             
             posts.add(elements)
         }
@@ -110,6 +124,17 @@ class PharmacyTableViewController: UITableViewController, XMLParserDelegate {
         if segue.identifier == "segueToMapView" {
             if let mapViewController = segue.destination as? MapViewController {
                 mapViewController.posts = posts
+            }
+        }
+        
+        if segue.identifier == "segueToPharmacyDetail" {
+            if let cell = sender as? UITableViewCell {
+                let indexPath = tableView.indexPath(for: cell)
+                pharmacyid = (posts.object(at: (indexPath?.row)!) as AnyObject).value(forKey: "hpid") as! NSString as String
+                
+                if let detailPharmacyTableViewController = segue.destination as? DetailPharmacyTableViewController {
+                    detailPharmacyTableViewController.url = url! + "&HPID=" + pharmacyid
+                }
             }
         }
     }

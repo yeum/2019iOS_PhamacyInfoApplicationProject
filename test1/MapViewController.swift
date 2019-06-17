@@ -78,8 +78,8 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        // 초기위치 서울시 강남구
-        let initialLocation = CLLocation(latitude: 37.497923, longitude: 127.027677)
+        // 초기위치 서울시 노원구
+        let initialLocation = CLLocation(latitude: 37.654432, longitude: 127.060096)
         // 메소드 호출
         centerMapOnLocation(location: initialLocation)
         // MapViewController가 mapView의 delegate임을 설정
